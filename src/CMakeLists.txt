@@ -24,5 +24,12 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 add_executable(mDNS-hubd
+    error.hpp
+    error.cpp
+    configuration.hpp
+    main_loop.hpp
+    main_loop.cpp
+    executable.hpp
+    executable.cpp
     main.cpp)
 

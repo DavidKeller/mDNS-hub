@@ -1,0 +1,97 @@
+#include "executable.hpp"
+
+#include <unistd.h>
+#include <cstdlib>
+#include <stdexcept>
+#include <sstream>
+
+#include "configuration.hpp"
+#include "main_loop.hpp"
+#include "error.hpp"
+
+namespace executable {
+
+namespace {
+
+/**
+ *
+ */
+configuration
+parse_configuration
+    ( int argc
+    , char * argv[] )
+{
+    configuration parsed_configuration = {};
+
+    // Set arguments default value.
+    parsed_configuration.mdns_port = 5353;
+
+    // Prevent print to stderr.
+    opterr = 0;
+
+    // Parse optional arguments.
+    int current_option;
+    while ((current_option = getopt(argc, argv, "+dvp:h")) != -1)
+        switch (current_option)
+        {
+            case 'd':
+                parsed_configuration.daemonize = true;
+                break;
+            case 'v':
+                parsed_configuration.verbose = true;
+                break;
+            case 'p':
+                parsed_configuration.mdns_port = std::atoi(optarg);
+                break;
+            case 'h':
+                parsed_configuration.print_help = true;
+                break;
+            case '?':
+                throw_because() << "'-" << char(optopt) << "'"
+                        " command line argument is unknown" << std::flush;
+            default:
+                break;
+        }
+
+    // Parse remaining arguments.
+    for (; optind < argc; ++optind)
+        parsed_configuration.interfaces_name_or_address.push_back(argv[optind]);
+
+    return parsed_configuration;
+}
+
+/**
+ *
+ */
+void daemonize(configuration const& parsed_configuration)
+{
+    throw_because() << "daemonizing is unimplemented" << std::flush;
+
+    main_loop::run(parsed_configuration);
+}
+
+} // namespace
+
+void
+run
+    ( int argc
+    , char * argv[] )
+{
+    const configuration parsed_configuration(parse_configuration(argc, argv));
+
+    if (parsed_configuration.print_help)
+        throw_because() << "arguments are incorrect: " << argv[0] 
+                << " [-dvh] [-p port] interface..." << std::flush;
+
+    else if (parsed_configuration.interfaces_name_or_address.empty())
+        throw_because() << "no interface is provided" << std::flush;
+
+    else if (parsed_configuration.daemonize)
+        daemonize(parsed_configuration);
+
+    else
+        main_loop::run(parsed_configuration);
+}
+
+} // namespace executable
+

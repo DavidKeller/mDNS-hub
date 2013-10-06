@@ -30,6 +30,4 @@ add_definitions(-DPACKAGE_BUGREPORT="david.keller@litchis.fr")
 
 # Build everything.
 add_subdirectory(src)
-enable_testing()
-add_subdirectory(test)
 
