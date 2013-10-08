@@ -1,6 +1,6 @@
 #include "main_loop.hpp"
 
-#include <stdexcept>
+#include "error.hpp"
 
 namespace main_loop  {
 
@@ -8,7 +8,7 @@ void
 run
     ( configuration const& parsed_configuration )
 {
-    throw std::runtime_error("unimplemented");
+    throw because() << "main loop is not yet implemented";
 }
 
 } // namespace main_loop

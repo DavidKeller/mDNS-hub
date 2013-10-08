@@ -47,8 +47,8 @@ parse_configuration
                 parsed_configuration.print_help = true;
                 break;
             case '?':
-                throw_because() << "'-" << char(optopt) << "'"
-                        " command line argument is unknown" << std::flush;
+                throw because() << "'-" << char(optopt) << "'"
+                        " command line argument is unknown";
             default:
                 break;
         }
@@ -65,7 +65,7 @@ parse_configuration
  */
 void daemonize(configuration const& parsed_configuration)
 {
-    throw_because() << "daemonizing is unimplemented" << std::flush;
+    throw because() << "daemonizing is unimplemented";
 
     main_loop::run(parsed_configuration);
 }
@@ -80,11 +80,11 @@ run
     const configuration parsed_configuration(parse_configuration(argc, argv));
 
     if (parsed_configuration.print_help)
-        throw_because() << "arguments are incorrect: " << argv[0] 
-                << " [-dvh] [-p port] interface..." << std::flush;
+        throw because() << "arguments are incorrect: " << argv[0] 
+                << " [-dvh] [-p port] interfaces...";
 
-    else if (parsed_configuration.interfaces_name_or_address.empty())
-        throw_because() << "no interface is provided" << std::flush;
+    else if (parsed_configuration.interfaces_name_or_address.size() < 2)
+        throw because() << "at least two interfaces are expected";
 
     else if (parsed_configuration.daemonize)
         daemonize(parsed_configuration);
