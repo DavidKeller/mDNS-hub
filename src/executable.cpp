@@ -23,16 +23,13 @@ parse_configuration
 {
     configuration parsed_configuration = {};
 
-    // Set arguments default value.
-    parsed_configuration.mdns_port = 5353;
-
     // Prevent print to stderr.
     opterr = 0;
 
     // Parse optional arguments.
     int current_option;
-    while ((current_option = getopt(argc, argv, "+dvp:h")) != -1)
-        switch (current_option)
+    while ( ( current_option = ::getopt( argc, argv, "+dvh" ) ) != -1 )
+        switch ( current_option )
         {
             case 'd':
                 parsed_configuration.daemonize = true;
@@ -40,22 +37,20 @@ parse_configuration
             case 'v':
                 parsed_configuration.verbose = true;
                 break;
-            case 'p':
-                parsed_configuration.mdns_port = std::atoi(optarg);
                 break;
             case 'h':
                 parsed_configuration.print_help = true;
                 break;
             case '?':
-                throw because() << "'-" << char(optopt) << "'"
+                throw because() << "'-" << char( optopt ) << "'"
                         " command line argument is unknown";
             default:
                 break;
         }
 
     // Parse remaining arguments.
-    for (; optind < argc; ++optind)
-        parsed_configuration.interfaces_name_or_address.push_back(argv[optind]);
+    for ( ; optind < argc; ++optind )
+        parsed_configuration.interfaces_name.push_back( argv[ optind ] );
 
     return parsed_configuration;
 }
@@ -63,11 +58,13 @@ parse_configuration
 /**
  *
  */
-void daemonize(configuration const& parsed_configuration)
+void 
+daemonize
+    ( configuration const& parsed_configuration )
 {
     throw because() << "daemonizing is unimplemented";
 
-    main_loop::run(parsed_configuration);
+    main_loop::run( parsed_configuration );
 }
 
 } // namespace
@@ -77,20 +74,20 @@ run
     ( int argc
     , char * argv[] )
 {
-    const configuration parsed_configuration(parse_configuration(argc, argv));
+    const configuration parsed_configuration( parse_configuration( argc, argv ) );
 
-    if (parsed_configuration.print_help)
+    if ( parsed_configuration.print_help )
         throw because() << "arguments are incorrect: " << argv[0] 
-                << " [-dvh] [-p port] interfaces...";
+                << " [-dvh] interfaces...";
 
-    else if (parsed_configuration.interfaces_name_or_address.size() < 2)
+    else if ( parsed_configuration.interfaces_name.size() < 2 )
         throw because() << "at least two interfaces are expected";
 
-    else if (parsed_configuration.daemonize)
-        daemonize(parsed_configuration);
+    else if ( parsed_configuration.daemonize )
+        daemonize( parsed_configuration );
 
     else
-        main_loop::run(parsed_configuration);
+        main_loop::run( parsed_configuration );
 }
 
 } // namespace executable

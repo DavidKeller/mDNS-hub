@@ -15,12 +15,12 @@ main
     }
     catch (std::exception const& failure)
     {
-        std::cerr << "fatal failure: " << failure.what() << "." << std::endl;
+        std::cerr << "terminated because " << failure.what() << "." << std::endl;
         return EXIT_FAILURE;
     }
     catch (...) 
     {
-        std::cerr << "unknown fatal failure." << std::endl;
+        std::cerr << "terminated because of an unknown failure." << std::endl;
         return EXIT_FAILURE;
     }
 }

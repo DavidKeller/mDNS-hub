@@ -9,16 +9,6 @@
  */
 class because : public virtual std::exception
 {
-    char * msg_;
-
-    /**
-     *
-     */
-    static char *
-    strdup
-        ( const char * source )
-        throw();
-
 public:
     /**
      *
@@ -65,6 +55,19 @@ public:
     because &
     operator<<
         ( Value const& value );
+
+private:
+    /**
+     *
+     */
+    static char *
+    strdup
+        ( const char * source )
+        throw();
+
+private:
+    ///
+    char * msg_;
 };
 
 inline 
