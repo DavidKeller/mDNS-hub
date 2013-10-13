@@ -27,8 +27,8 @@ add_executable(mDNS-hubd
     error.hpp
     interface.hpp
     interface.cpp
-    udp_socket.hpp
-    udp_socket.cpp
+    mdns_socket.hpp
+    mdns_socket.cpp
     configuration.hpp
     main_loop.hpp
     main_loop.cpp

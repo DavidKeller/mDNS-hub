@@ -74,14 +74,14 @@ run
     ( int argc
     , char * argv[] )
 {
-    const configuration parsed_configuration( parse_configuration( argc, argv ) );
+    configuration const parsed_configuration( parse_configuration( argc, argv ) );
 
     if ( parsed_configuration.print_help )
         throw because() << "arguments are incorrect: " << argv[0] 
                 << " [-dvh] interfaces...";
 
     else if ( parsed_configuration.interfaces_name.size() < 2 )
-        throw because() << "at least two interfaces are expected";
+        throw because() << "at least two interfaces arguments are expected";
 
     else if ( parsed_configuration.daemonize )
         daemonize( parsed_configuration );
