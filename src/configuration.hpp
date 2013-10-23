@@ -5,12 +5,14 @@
 #include <vector>
 #include <string>
 
+typedef std::vector< std::string > interfaces_name;
+
 struct configuration
 {
-    std::vector< std::string > interfaces_name;
-    bool daemonize;
-    bool verbose;
-    bool print_help;
+    interfaces_name interfaces_name_;
+    bool daemonize_;
+    bool verbose_;
+    bool print_help_;
 };
 
 #endif

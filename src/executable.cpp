@@ -32,14 +32,14 @@ parse_configuration
         switch ( current_option )
         {
             case 'd':
-                parsed_configuration.daemonize = true;
+                parsed_configuration.daemonize_ = true;
                 break;
             case 'v':
-                parsed_configuration.verbose = true;
+                parsed_configuration.verbose_ = true;
                 break;
                 break;
             case 'h':
-                parsed_configuration.print_help = true;
+                parsed_configuration.print_help_ = true;
                 break;
             case '?':
                 throw because() << "'-" << char( optopt ) << "'"
@@ -50,7 +50,7 @@ parse_configuration
 
     // Parse remaining arguments.
     for ( ; optind < argc; ++optind )
-        parsed_configuration.interfaces_name.push_back( argv[ optind ] );
+        parsed_configuration.interfaces_name_.push_back( argv[ optind ] );
 
     return parsed_configuration;
 }
@@ -76,14 +76,14 @@ run
 {
     configuration const parsed_configuration( parse_configuration( argc, argv ) );
 
-    if ( parsed_configuration.print_help )
+    if ( parsed_configuration.print_help_ )
         throw because() << "arguments are incorrect: " << argv[0] 
                 << " [-dvh] interfaces...";
 
-    else if ( parsed_configuration.interfaces_name.size() < 2 )
+    else if ( parsed_configuration.interfaces_name_.size() < 2 )
         throw because() << "at least two interfaces arguments are expected";
 
-    else if ( parsed_configuration.daemonize )
+    else if ( parsed_configuration.daemonize_ )
         daemonize( parsed_configuration );
 
     else

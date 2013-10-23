@@ -1,17 +1,26 @@
 #ifndef INTERFACE_HPP
 #define INTERFACE_HPP
 
-#include <vector>
+#include <map>
 #include <string>
+#include <netinet/in.h>
 
-#include "mdns_socket.hpp"
+#include "output_socket.hpp"
+
+struct interface_description
+{
+    ::in_addr ip_;
+    ::in_addr mask_;
+};
+
+typedef std::map< std::string, interface_description > interface_descriptions;
 
 /**
  *
  */
-std::vector< mdns_socket_ptr >
-create_mdns_sockets_bound_to_interfaces
-    ( std::vector< std::string > const& interfaces_name );
+interface_descriptions
+get_interfaces_description
+    ( void );
 
 #endif
 

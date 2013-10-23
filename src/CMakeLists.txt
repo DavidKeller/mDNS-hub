@@ -25,10 +25,16 @@
 
 add_executable(mDNS-hubd
     error.hpp
+    subnet.hpp
+    address.hpp
+    address.cpp
+    message.hpp
     interface.hpp
     interface.cpp
-    mdns_socket.hpp
-    mdns_socket.cpp
+    input_socket.hpp
+    input_socket.cpp
+    output_socket.hpp
+    output_socket.cpp
     configuration.hpp
     main_loop.hpp
     main_loop.cpp

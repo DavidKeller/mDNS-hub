@@ -7,35 +7,35 @@
 /**
  *
  */
-class because : public virtual std::exception
+class fatal_exception : public virtual std::exception
 {
 public:
     /**
      *
      */
-    because
+    fatal_exception
         ( void )
         throw();
 
     /**
      *
      */
-    because
-        ( because const& other )
+    fatal_exception
+        ( fatal_exception const& other )
         throw();
 
     /**
      *
      */
-    because &
+    fatal_exception &
     operator=
-        ( because const& other )
+        ( fatal_exception const& other )
         throw();
 
     /**
      *
      */
-    ~because
+    ~fatal_exception
         ( void )
         throw();
 
@@ -52,7 +52,7 @@ public:
      *
      */
     template<typename Value>
-    because &
+    fatal_exception &
     operator<<
         ( Value const& value );
 
@@ -70,15 +70,24 @@ private:
     char * msg_;
 };
 
+/**
+ *
+ */
+inline fatal_exception
+because
+    ( void )
+{ return fatal_exception(); }
+
+
 inline 
-because::because
+fatal_exception::fatal_exception
     ( void )
     throw()
         : msg_( NULL )
 { }
 
 inline char *
-because::strdup
+fatal_exception::strdup
     ( const char * source )
     throw()
 {
@@ -97,15 +106,15 @@ because::strdup
 }
 
 inline
-because::because
-    ( because const& other )
+fatal_exception::fatal_exception
+    ( fatal_exception const& other )
     throw()
         : msg_( strdup( other.msg_ ) )
 { }
 
-inline because &
-because::operator=
-    ( because const& other )
+inline fatal_exception &
+fatal_exception::operator=
+    ( fatal_exception const& other )
     throw()
 {
     if ( msg_ )
@@ -117,7 +126,7 @@ because::operator=
 }
 
 inline 
-because::~because
+fatal_exception::~fatal_exception
     ( void )
     throw()
 {
@@ -126,7 +135,7 @@ because::~because
 }
 
 inline const char *
-because::what
+fatal_exception::what
     ( void )
     const
     throw()
@@ -138,8 +147,8 @@ because::what
 }
 
 template<typename Value>
-inline because &
-because::operator<<
+inline fatal_exception &
+fatal_exception::operator<<
     ( Value const& value )
 {
     std::ostringstream buffer( std::ostringstream::ate );
