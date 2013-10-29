@@ -15,15 +15,10 @@ operator<<
     ( std::ostream & out
     , ::sockaddr_in const& address );
 
-::in_addr const&
-as_inet_address
-    ( ::sockaddr const& address );
-
-typedef union
-{
-    ::sockaddr_in socket_inet_address_;
-    ::sockaddr socket_address_;
-} socket_address;
+::sockaddr
+to_socket_address
+    ( char const * ip
+    , uint16_t port );
 
 inline ::in_addr
 operator &
@@ -40,6 +35,18 @@ operator ==
     ( ::in_addr const& a
     , ::in_addr const& b )
 { return a.s_addr == b.s_addr; }
+
+inline ::sockaddr_in const&
+as_inet
+    ( ::sockaddr const& address )
+{ return reinterpret_cast< ::sockaddr_in const& >( address ); }
+
+inline ::sockaddr const&
+as_generic
+    ( ::sockaddr_in const& address )
+{ return reinterpret_cast< ::sockaddr const& >( address ); }
+
+
 
 
 #endif // ADDRESS_HPP

@@ -31,10 +31,8 @@ add_executable(mDNS-hubd
     message.hpp
     interface.hpp
     interface.cpp
-    input_socket.hpp
-    input_socket.cpp
-    output_socket.hpp
-    output_socket.cpp
+    udp_socket.hpp
+    udp_socket.cpp
     configuration.hpp
     main_loop.hpp
     main_loop.cpp

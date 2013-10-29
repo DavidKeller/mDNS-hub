@@ -34,11 +34,12 @@ get_interfaces_description
         if ( family != AF_INET )
             continue;
 
-        interface_description const description = 
-            { as_inet_address( *current_address->ifa_addr )
-            , as_inet_address( *current_address->ifa_netmask ) };
+        interface_description const new_description = 
+            { as_inet( *current_address->ifa_addr ).sin_addr
+            , as_inet( *current_address->ifa_netmask ).sin_addr };
 
-        descriptions.insert( std::make_pair( current_address->ifa_name, description ) );
+        descriptions.insert( std::make_pair( current_address->ifa_name
+                                           , new_description ) );
     }
 
     return descriptions;

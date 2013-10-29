@@ -5,8 +5,6 @@
 #include <string>
 #include <netinet/in.h>
 
-#include "output_socket.hpp"
-
 struct interface_description
 {
     ::in_addr ip_;

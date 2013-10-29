@@ -12,10 +12,9 @@ public:
     subnet
         ( ::in_addr const& address 
         , ::in_addr const& mask );
-
    
     bool
-    is_from_this_subnet
+    contains
         ( ::in_addr const& address );
 
 private:
@@ -32,7 +31,7 @@ subnet::subnet
 { }
 
 inline bool
-subnet::is_from_this_subnet
+subnet::contains
     ( ::in_addr const& address )
 { return subnet_ == (address & mask_); }
 
