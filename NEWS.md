@@ -1,4 +1,6 @@
 # 0.0.2
+    
+    - Draft daemonizing.
 
     - First working alpha:
       * mDNS Packets are forwarded

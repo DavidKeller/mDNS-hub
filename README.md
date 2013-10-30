@@ -1,6 +1,14 @@
 # Description
-Dead simple C++03 mDNS daemon that forward mDNS traffic accross subnets.
+Dead simple C++03 mDNS daemon that forwards mDNS traffic accross subnets.
 
-# Development
-Documentation intended for developers is stored 
-under 'doc/'.
+It allows devices living on different subnets to see each others.
+
+# Usage
+Start the application with each subnet interface you want to share mDNS traffic.
+
+    $mDNS-hub eth1 eth2 .. ethX
+
+You can use the -d argument if you want application to daemonize in the background:
+
+    $mDNS-hub -d eth1 eth2 .. ethX
+

@@ -2,6 +2,7 @@
 
 ## Requirements
  * cmake 
+ * c++ compiler
 
 ## Compilation
  1. `$ mkdir build && cd build`
