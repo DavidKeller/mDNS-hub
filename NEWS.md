@@ -1,3 +1,7 @@
+# 1.0.0
+
+    - Add OpenBSD rc.d script.
+
 # 0.0.2
     
     - Draft daemonizing.
