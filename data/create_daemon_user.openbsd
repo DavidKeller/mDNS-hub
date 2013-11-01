@@ -1,0 +1,4 @@
+#!/bin/sh
+
+useradd -c 'mDNS-hub daemon user' -d /var/empty -s /sbin/nologin -L daemon _mdnshubd
+

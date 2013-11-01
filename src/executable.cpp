@@ -32,6 +32,7 @@
 #include <stdexcept>
 #include <cerrno>
 #include <sstream>
+#include <iostream>
 
 #include "configuration.hpp"
 #include "main_loop.hpp"
@@ -56,13 +57,16 @@ parse_configuration
 
     // Parse optional arguments.
     int current_option;
-    while ( ( current_option = ::getopt( argc, argv, "+dvh" ) ) != -1 )
+    while ( ( current_option = ::getopt( argc, argv, "+dfvh" ) ) != -1 )
         switch ( current_option )
         {
-            case 'd':
-                parsed_configuration.daemonize_ = true;
+            case 'f':
+                parsed_configuration.stay_in_foreground_ = true;
                 break;
             case 'v':
+                parsed_configuration.print_version_ = true;
+                break;
+            case 'd':
                 parsed_configuration.verbose_ = true;
                 break;
             case 'h':
@@ -129,14 +133,22 @@ run
 {
     configuration const parsed_configuration( parse_configuration( argc, argv ) );
 
-    if ( parsed_configuration.print_help_ )
-        throw because() << "arguments are incorrect: " << argv[0] 
-                << " [-dvh] interfaces...";
+    if ( parsed_configuration.print_help_ ) 
+        std::cout << "Usage: " << argv[0] << " [-fdvh] interfaces...\n"
+                "Where:\n"
+                "\t-d\tEnable verbose mode.\n"
+                "\t-v\tPrint version.\n"
+                "\t-f\tStay in foreground.\n"
+                "\t-h\tPrint this help." << std::endl;
+
+    else if ( parsed_configuration.print_version_ )
+        std::cout << argv[0] << " " << PACKAGE_VERSION
+            << "\n\tBug report: " << PACKAGE_BUGREPORT << std::endl;
 
     else if ( parsed_configuration.interfaces_name_.size() < 2 )
         throw because() << "at least two interfaces arguments are expected";
 
-    else if ( parsed_configuration.daemonize_ )
+    else if ( ! parsed_configuration.stay_in_foreground_ )
         daemonize( parsed_configuration );
 
     else

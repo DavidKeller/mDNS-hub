@@ -26,8 +26,9 @@ cmake_minimum_required(VERSION 2.8)
 project(mDNS-hub) 
 
 add_definitions(-DPACKAGE_VERSION="1.0.0")
-add_definitions(-DPACKAGE_BUGREPORT="david.keller@litchis.fr")
+add_definitions(-DPACKAGE_BUGREPORT="David Keller <david.keller@litchis.fr>")
 
 # Build everything.
 add_subdirectory(src)
+add_subdirectory(data)
 

@@ -35,9 +35,10 @@ typedef std::vector< std::string > interfaces_name;
 struct configuration
 {
     interfaces_name interfaces_name_;
-    bool daemonize_;
+    bool stay_in_foreground_;
     bool verbose_;
     bool print_help_;
+    bool print_version_;
 };
 
 #endif

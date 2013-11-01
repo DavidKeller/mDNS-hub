@@ -23,25 +23,20 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-add_executable(mdnshubd
-    error.hpp
-    subnet.hpp
-    address.hpp
-    address.cpp
-    message.hpp
-    interface.hpp
-    interface.cpp
-    udp_socket.hpp
-    udp_socket.cpp
-    configuration.hpp
-    main_loop.hpp
-    main_loop.cpp
-    executable.hpp
-    executable.cpp
-    main.cpp)
+configure_file(etc/rc.d/mdnshubd.openbsd.in ${CMAKE_CURRENT_BINARY_DIR}/etc/rc.d/mdnshubd.openbsd @ONLY)
 
-install(TARGETS 
-        mdnshubd
+macro(run_install_script script_path)
+    install(CODE "execute_process(COMMAND ${script_path})")
+endmacro()
+
+run_install_script("${CMAKE_CURRENT_SOURCE_DIR}/create_daemon_user.openbsd")
+
+install(PROGRAMS
+        ${CMAKE_CURRENT_BINARY_DIR}/etc/rc.d/mdnshubd.openbsd
     DESTINATION 
-        sbin/)
+        /etc/rc.d/
+    PERMISSIONS
+       OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+    RENAME 
+        mdnshubd)
 
