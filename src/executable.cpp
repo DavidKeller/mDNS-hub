@@ -24,6 +24,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "executable.hpp"
+#include <sys/file.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -41,6 +42,9 @@
 namespace executable {
 
 namespace {
+
+std::string const LOG_FILE( "/var/log/mdnshubd.log");
+std::string const PID_FILE( "/var/run/mdnshubd.pid");
 
 /**
  *
@@ -89,9 +93,33 @@ parse_configuration
 /**
  *
  */
+void
+ensure_not_already_launched
+    ( void )
+{
+    int const pid_file = ::open ( PID_FILE.c_str(), O_CREAT | O_WRONLY );
+    if ( pid_file < 0 )
+        throw because() << "can't open " << PID_FILE << " '" << ::strerror( errno ) << "'";
+    
+    struct ::flock lock = { };
+    lock.l_pid = ::getpid();
+    lock.l_type = F_WRLCK;
+    lock.l_whence = SEEK_SET;
+    if ( ::fcntl( pid_file, F_SETLK, &lock ) < 0 )
+        throw because() << "an instance of the daemon is already running '" 
+                << ::strerror( errno ) << "'";
+   
+    if ( ::dprintf( pid_file, "%u", lock.l_pid ) < 0 )
+        throw because() << "can't save pid '"
+                << ::strerror( errno ) << "'";
+}
+
+/**
+ *
+ */
 void 
 daemonize
-    ( configuration const& parsed_configuration )
+    ( void )
 {
     pid_t const pid = ::fork();
     if ( pid < 0)
@@ -99,9 +127,9 @@ daemonize
 
     // If this is parent process, exit.
     if ( pid )
-        return;
+        ::exit( EXIT_SUCCESS );
 
-    ::umask( 0 );
+    ::umask( S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH );
 
     // Detach from parent session.
     if ( ::setsid() < 0 )
@@ -114,14 +142,17 @@ daemonize
     if ( ::close( STDIN_FILENO ) < 0 )
         throw because() << "can't close stdin '" << ::strerror( errno ) << "'";
 
-    if ( ::open ("/dev/null", O_RDWR) != STDIN_FILENO )
-        throw because() << "can't open /dev/null '" << ::strerror( errno ) << "'";
-        
-    if ( ::dup2( 0, STDOUT_FILENO ) < 0 || ::dup2( 0, STDERR_FILENO ) < 0 )
-        throw because() << "can't reassign stdout & stderr'" 
-                << ::strerror( errno ) << "'";
+    if ( ::open ( "/dev/null", O_RDONLY ) != STDIN_FILENO )
+        throw because() << "can't open /dev/null'" << ::strerror( errno ) << "'";
+       
+    if ( ::close( STDOUT_FILENO ) < 0 )
+        throw because() << "can't close stdout '" << ::strerror( errno ) << "'";
 
-    main_loop::run( parsed_configuration );
+    if ( ::open ( LOG_FILE.c_str(), O_CREAT | O_WRONLY ) != STDOUT_FILENO )
+        throw because() << "can't open " << LOG_FILE << " '" << ::strerror( errno ) << "'";
+
+    if ( ::dup2( STDOUT_FILENO, STDERR_FILENO ) < 0 )
+        throw because() << "can't reassign stderr '" << ::strerror( errno ) << "'";
 }
 
 } // namespace
@@ -131,6 +162,8 @@ run
     ( int argc
     , char * argv[] )
 {
+    ensure_not_already_launched();
+
     configuration const parsed_configuration( parse_configuration( argc, argv ) );
 
     if ( parsed_configuration.print_help_ ) 
@@ -148,11 +181,12 @@ run
     else if ( parsed_configuration.interfaces_name_.size() < 2 )
         throw because() << "at least two interfaces arguments are expected";
 
-    else if ( ! parsed_configuration.stay_in_foreground_ )
-        daemonize( parsed_configuration );
+    if ( ! parsed_configuration.stay_in_foreground_ )
+        daemonize();
 
-    else
-        main_loop::run( parsed_configuration );
+    ensure_not_already_launched(); 
+
+    main_loop::run( parsed_configuration );
 }
 
 } // namespace executable
