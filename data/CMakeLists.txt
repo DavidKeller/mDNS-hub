@@ -23,17 +23,17 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-configure_file(etc/rc.d/mdnshubd.openbsd.in ${CMAKE_CURRENT_BINARY_DIR}/etc/rc.d/mdnshubd.openbsd @ONLY)
+configure_file(etc/rc.d/mdnshubd.${CMAKE_SYSTEM_NAME}.in ${CMAKE_CURRENT_BINARY_DIR}/etc/rc.d/mdnshubd.${CMAKE_SYSTEM_NAME} @ONLY)
 
 macro(run_install_script script_path)
     install(CODE "execute_process(COMMAND ${script_path})")
 endmacro()
 
-run_install_script("${CMAKE_CURRENT_SOURCE_DIR}/create_daemon_user.openbsd")
+run_install_script("${CMAKE_CURRENT_SOURCE_DIR}/create_user_and_directories.${CMAKE_SYSTEM_NAME}")
 
 install(PROGRAMS
-        ${CMAKE_CURRENT_BINARY_DIR}/etc/rc.d/mdnshubd.openbsd
-    DESTINATION 
+        ${CMAKE_CURRENT_BINARY_DIR}/etc/rc.d/mdnshubd.${CMAKE_SYSTEM_NAME}
+    DESTINATION
         /etc/rc.d/
     PERMISSIONS
        OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE

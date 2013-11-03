@@ -43,8 +43,8 @@ namespace executable {
 
 namespace {
 
-std::string const LOG_FILE( "/var/log/mdnshubd.log");
-std::string const PID_FILE( "/var/run/mdnshubd.pid");
+std::string const LOG_FILE( "/var/log/mdnshubd/mdnshubd.log");
+std::string const PID_FILE( "/var/run/mdnshubd/mdnshubd.pid");
 
 /**
  *
@@ -181,12 +181,14 @@ run
     else if ( parsed_configuration.interfaces_name_.size() < 2 )
         throw because() << "at least two interfaces arguments are expected";
 
-    if ( ! parsed_configuration.stay_in_foreground_ )
-        daemonize();
+    else {
+        if ( ! parsed_configuration.stay_in_foreground_ )
+            daemonize();
 
-    ensure_not_already_launched(); 
+        ensure_not_already_launched(); 
 
-    main_loop::run( parsed_configuration );
+        main_loop::run( parsed_configuration );
+    }
 }
 
 } // namespace executable

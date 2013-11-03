@@ -1,0 +1,12 @@
+#!/bin/sh
+
+new_user='_mdnshubd'
+userdel $new_user 2>/dev/null
+useradd -c 'mDNS-hub daemon user' -d /var/empty -s /sbin/nologin -L daemon -g =uid $new_user
+
+new_log_dir='/var/log/mdnshubd'
+mkdir -p $new_log_dir && chown $new_user:$new_user $new_log_dir
+
+new_run_dir='/var/run/mdnshubd'
+mkdir -p $new_run_dir && chown $new_user:$new_user $new_run_dir
+
