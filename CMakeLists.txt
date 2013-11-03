@@ -25,7 +25,10 @@
 cmake_minimum_required(VERSION 2.8) 
 project(mDNS-hub) 
 
-add_definitions(-DPACKAGE_VERSION="1.0.0")
+include(build_scripts/GetVersionFromNEWSFile.cmake)
+get_version_from_file("${CMAKE_CURRENT_SOURCE_DIR}/NEWS.md" PACKAGE_VERSION)
+
+add_definitions(-DPACKAGE_VERSION="${PACKAGE_VERSION}")
 add_definitions(-DPACKAGE_BUGREPORT="David Keller <david.keller@litchis.fr>")
 
 # Build everything.

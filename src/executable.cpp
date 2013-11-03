@@ -162,8 +162,6 @@ run
     ( int argc
     , char * argv[] )
 {
-    ensure_not_already_launched();
-
     configuration const parsed_configuration( parse_configuration( argc, argv ) );
 
     if ( parsed_configuration.print_help_ ) 
@@ -181,7 +179,8 @@ run
     else if ( parsed_configuration.interfaces_name_.size() < 2 )
         throw because() << "at least two interfaces arguments are expected";
 
-    else {
+    else 
+    {
         if ( ! parsed_configuration.stay_in_foreground_ )
             daemonize();
 

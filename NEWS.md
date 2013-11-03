@@ -1,3 +1,7 @@
+# 1.0.1
+
+    - Create pid and log dir on install.
+
 # 1.0.0
 
     - Add OpenBSD rc.d script.
