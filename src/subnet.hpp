@@ -30,20 +30,36 @@
 
 #include "address.hpp"
 
+/**
+ *  @brief Represents a subnet.
+ */
 class subnet
 {
 public:
+    /**
+     *  @brief Construct a subnet from an address and a mask.
+     *  @param address The subnet IPv4 address.
+     *  @param mask The subnet corresponding mask.
+     */
     explicit
     subnet
         ( ::in_addr const& address 
         , ::in_addr const& mask );
    
+    /**
+     *  @brief Check if an IPv4 lives within the subnet.
+     *  @param address The IPv4 candidate address.
+     *  @return true of the address belongs to this subnet.
+     */
+    explicit
     bool
     contains
         ( ::in_addr const& address );
 
 private:
+    /// The IPv4 subnet address.
     ::in_addr subnet_;
+    /// The subnet mask.
     ::in_addr mask_;
 };
 
