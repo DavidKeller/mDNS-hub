@@ -51,7 +51,6 @@ public:
      *  @param address The IPv4 candidate address.
      *  @return true of the address belongs to this subnet.
      */
-    explicit
     bool
     contains
         ( ::in_addr const& address );
