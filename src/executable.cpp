@@ -97,7 +97,9 @@ void
 ensure_not_already_launched
     ( void )
 {
-    int const pid_file = ::open ( PID_FILE.c_str(), O_CREAT | O_WRONLY );
+    int const pid_file = ::open ( PID_FILE.c_str()
+                                , O_CREAT | O_WRONLY
+                                , S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH );
     if ( pid_file < 0 )
         throw because() << "can't open " << PID_FILE << " '" << ::strerror( errno ) << "'";
     
@@ -148,7 +150,9 @@ daemonize
     if ( ::close( STDOUT_FILENO ) < 0 )
         throw because() << "can't close stdout '" << ::strerror( errno ) << "'";
 
-    if ( ::open ( LOG_FILE.c_str(), O_CREAT | O_WRONLY ) != STDOUT_FILENO )
+    if ( ::open ( LOG_FILE.c_str()
+                , O_CREAT | O_WRONLY
+                , S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH ) != STDOUT_FILENO )
         throw because() << "can't open " << LOG_FILE << " '" << ::strerror( errno ) << "'";
 
     if ( ::dup2( STDOUT_FILENO, STDERR_FILENO ) < 0 )
