@@ -30,16 +30,18 @@
 #include <string>
 #include <netinet/in.h>
 
+/// Represents an interface address and mask.
 struct interface_description
 {
     ::in_addr ip_;
     ::in_addr mask_;
 };
 
+/// Map interface description with their name.
 typedef std::map< std::string, interface_description > interface_descriptions;
 
 /**
- *
+ *  @brief Retreive all configured interfaces description.
  */
 interface_descriptions
 get_interfaces_description

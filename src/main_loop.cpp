@@ -36,24 +36,20 @@ namespace main_loop  {
 
 namespace {
 
-///
+/// Represents the mDNS multicast endpoint.
 const ::sockaddr MDNS_MULTICAST_ADDRESS( to_socket_address( "224.0.0.251", 5353) );
 
-/**
- *
- */
+/// Represents a mDNS enabled subnet and its associated socket.
 struct output_socket
 {
     subnet subnet_;
     udp_socket_ptr socket_;
 };
 
-///
+/// Represents all mDNS enabled subnets.
 typedef std::vector< output_socket > output_sockets;
 
-/**
- *
- */
+/// Represents all mDNS enabled subnets and an input socket to receive messages.
 struct network
 {
     udp_socket_ptr input_socket_;

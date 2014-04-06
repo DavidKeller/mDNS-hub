@@ -43,11 +43,14 @@ namespace executable {
 
 namespace {
 
+/// Path to the log file.
 std::string const LOG_FILE( "/var/log/mdnshubd/mdnshubd.log");
+
+/// Path to the pid file.
 std::string const PID_FILE( "/var/run/mdnshubd/mdnshubd.pid");
 
 /**
- *
+ *  @brief Read command line arguments without checking.  
  */
 configuration
 parse_configuration
@@ -91,7 +94,8 @@ parse_configuration
 }
 
 /**
- *
+ *  @brief Write pid to pid file and ensure we can exclusively lock it.
+ *         i.e. no other instance is launched.
  */
 void
 ensure_not_already_launched
@@ -107,6 +111,7 @@ ensure_not_already_launched
     lock.l_pid = ::getpid();
     lock.l_type = F_WRLCK;
     lock.l_whence = SEEK_SET;
+    // This lock will be released by kernel on process exit.
     if ( ::fcntl( pid_file, F_SETLK, &lock ) < 0 )
         throw because() << "an instance of the daemon is already running '" 
                 << ::strerror( errno ) << "'";
@@ -117,7 +122,8 @@ ensure_not_already_launched
 }
 
 /**
- *
+ *  @brief Detach current process from terminal then open stdin on /dev/null and
+ *         stdout/err on a log file.
  */
 void 
 daemonize

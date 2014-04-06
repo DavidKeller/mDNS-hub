@@ -7,5 +7,9 @@ daemon_user="_mdnshubd"
 
 rc_reload=NO
 
+rc_pre() {
+	install -d -o ${daemon_user} /var/run/mdnshubd
+}
+
 rc_cmd $1
 

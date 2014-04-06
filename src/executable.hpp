@@ -28,6 +28,10 @@
 
 namespace executable {
 
+/**
+ *  @brief Parse command line argument, daemonize if required, and run 
+ *         main loop.
+ */
 void
 run
     ( int argc
